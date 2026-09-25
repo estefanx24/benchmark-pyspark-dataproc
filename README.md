@@ -1,28 +1,35 @@
-# Benchmark de Ejecución en PySpark con GCP Dataproc
+cat << 'EOF' > README.md
+# Benchmark de Ejecución en PySpark: Local vs. GCP Dataproc
 
-Este repositorio contiene los scripts y el procedimiento paso a paso para ejecutar y evaluar el rendimiento del pipeline de datos de trabajos de LinkedIn utilizando **PySpark** sobre un clúster distribuido en **Google Cloud Platform (GCP) Dataproc**.
-
----
-
-## 📋 Prerrequisitos
-
-1. **Cuenta en Google Cloud Platform (GCP)** con créditos activos.
-2. **Google Cloud SDK (`gcloud`)** instalado y configurado localmente o mediante GCP Cloud Shell.
-3. Archivos de datos (`postings`, `skills`, `job_summary`) subidos a un bucket de **Google Cloud Storage (GCS)** en formato CSV o Parquet.
+Este repositorio contiene la guía técnica, el detalle de recursos de infraestructura y los scripts para ejecutar y evaluar el rendimiento del pipeline de procesamiento sobre el dataset de ofertas de trabajo de LinkedIn utilizando **PySpark**. 
 
 ---
 
-## 🚀 Paso 1: Creación del Clúster de Dataproc
+## 🛠️ Recursos del Sistema y Tecnologías Utilizadas
 
-Creamos un clúster de Dataproc optimizado con 1 nodo Máster y 2 nodos Workers (`n1-standard-2` con 8 GB de RAM cada uno):
+### 1. Infraestructura Cloud (GCP Dataproc)
+* **Clúster Distribuido:** 1 Nodo Máster + 2 Nodos Workers.
+* **Tipo de Máquina por Nodo:** `n1-standard-2` (2 vCPUs, 8 GB RAM por nodo).
+* **Almacenamiento del Clúster:** Discos de arranque de 50 GB por nodo.
+* **Gestor de Recursos (Cluster Manager):** Apache YARN (configurado por defecto en Dataproc).
+* **Almacenamiento de Datos:** Google Cloud Storage (GCS) en bucket distribuido.
 
+### 2. Entorno de Software y Ejecución
+* **Lenguaje:** Python 3.10+
+* **Framework Distribuido:** PySpark (versión en Dataproc Image 2.1 - Debian 11)
+* **Runtime de Java:** Java OpenJDK 11 / 17 (Requerido para JVM / Spark Core)
+* **Formato de Datos:** Parquet con particionamiento distribuido (`gs://utec-linkedin-jobs-2026/processed_partitioned`)
+
+---
+
+## 💻 Configuración del Entorno Local (PyCharm)
+
+Si deseas replicar las pruebas en tu máquina local:
+
+### Prerrequisitos en la PC:
+* **Java JDK 11 o 17** con la variable de entorno `JAVA_HOME` configurada.
+* **Python 3.10+**.
+
+### Instalación de Librerías (Terminal / PyCharm):
 ```bash
-gcloud dataproc clusters create cluster-proyecto \
-    --region=us-west1 \
-    --zone=us-west1-c \
-    --master-machine-type=n1-standard-2 \
-    --master-boot-disk-size=50GB \
-    --num-workers=2 \
-    --worker-machine-type=n1-standard-2 \
-    --worker-boot-disk-size=50GB \
-    --image-version=2.1-debian11
+pip install pyspark pyarrow pandas findspark
