@@ -1,4 +1,3 @@
-cat << 'EOF' > README.md
 # Benchmark de Ejecución en PySpark: Local vs. GCP Dataproc
 
 Este repositorio contiene la guía técnica, el detalle de recursos de infraestructura y los scripts para ejecutar y evaluar el rendimiento del pipeline de procesamiento sobre el dataset de ofertas de trabajo de LinkedIn utilizando **PySpark**. 
